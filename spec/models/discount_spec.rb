@@ -17,4 +17,18 @@ RSpec.describe Discount, type: :model do
       should validate_numericality_of(:threshold).is_greater_than(0).only_integer
     end
   end
+
+  describe 'factory bot' do
+    it 'creates valid discount objects' do
+      example = build(:discount)
+      expect(example).to be_a(Discount)
+    end
+
+    it 'creates valid attributes' do
+      example = build(:discount, percent: 20, threshold: 7)
+
+      expect(example).to have_attributes(percent: 20)
+      expect(example).to have_attributes(threshold: 7)
+    end
+  end
 end
