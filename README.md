@@ -53,21 +53,21 @@ On your local machine open a terminal session and enter the following commands f
 
 - using ssh key <br>
 ```shell
-$ git clone git@github.com:tjroeder/little-esty-shop.git
+$ git clone git@github.com:tjroeder/bulk_discounts.git
 ```
 
 - using https <br>
 ```shell
-$ git clone https://github.com/tjroeder/little-esty-shop.git
+$ git clone https://github.com/tjroeder/bulk_discounts.git
 ```
 
 Once cloned, you'll have a new local copy in the directory you ran the clone command in.
 
 2. Change to the project directory:<br>
-In terminal, use `$cd` to navigate to the Little Esty Shop project directory.
+In terminal, use `$cd` to navigate to the Bulk Discounts project directory.
 
 ```shell
-$ cd little-esty-shop
+$ cd bulk_discounts
 ```
 
 3. Install required Gems utilizing Bundler: <br>
@@ -113,11 +113,11 @@ Use `bundle info [gemname]` to see where a bundled gem is installed.
 ```
 If there are any errors, verify that bundler, Rails, and your ruby environment are correctly setup.
 
-4. Database Migration<br>
+4. Database Migration
 Before using the web application you will need to setup your databases locally by running the following command
 
 ```shell
-$ rails db: {:drop, :create, :migrate, :seed}
+$ rails db:{:drop,:create,:migrate,:seed}
 ```
 
 5. CSV Load
