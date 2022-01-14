@@ -1,21 +1,25 @@
-# Little Esty Shop Project: Turing 2110 BE Mod 2
+# Bulk Discounts Project: Turing 2110 BE Mod 2
 
-![languages](https://img.shields.io/github/languages/top/tjroeder/little-esty-shop?color=red)
-![PRs](https://img.shields.io/github/issues-pr-closed/tjroeder/little-esty-shop)
+![languages](https://img.shields.io/github/languages/top/tjroeder/bulk_discounts?color=red)
+![PRs](https://img.shields.io/github/issues-pr-closed/tjroeder/bulk_discounts)
 ![rspec](https://img.shields.io/gem/v/rspec?color=blue&label=rspec)
 ![simplecov](https://img.shields.io/gem/v/simplecov?color=blue&label=simplecov) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/contributors-4-orange.svg?style=flat)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/contributors-1-orange.svg?style=flat)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Background and Description
 
-"Little Esty Shop" is a group project that requires students to build a fictitious e-commerce platform where merchants and admins can manage inventory and fulfill customer invoices. The project also features GitHub API statistics that will update as contributors add commits, and pull requests to the project.
-- Original Project and Requirements can be found [here](https://github.com/turingschool-examples/little-esty-shop).
+This project is an extension of the Little Esty Shop group project. You will add functionality for merchants to create bulk discounts for their items. A “bulk discount” is a discount based on the quantity of items the customer is buying, for example “20% off orders of 10 or more items”.
+- Original Project and Requirements for Little Esty Shop can be found [here](https://github.com/turingschool-examples/little-esty-shop).
+- The Project and Requirement for Bulk Discount can be found [here](https://backend.turing.edu/module2/projects/bulk_discounts).
 
 ## Learning Goals
-- Practice designing a normalized database schema and defining model relationships
-- Utilize advanced routing techniques including namespacing to organize and group like functionality together.
-- Utilize advanced active record techniques to perform complex database queries
+- Write migrations to create tables and relationships between tables
+- Implement CRUD functionality for a resource using forms (form_tag or form_with), buttons, and links
+- Use MVC to organize code effectively, limiting the amount of logic included in views and controllers
+- Use built-in ActiveRecord methods to join multiple tables of data, make calculations, and group data based on one or more attributes
+- Write model tests that fully cover the data logic of the application
+- Write feature tests that fully cover the functionality of the application
 - Practice consuming a public API while utilizing POROs as a way to apply OOP principles to organize code
 
 ## Schema
@@ -138,24 +142,17 @@ At this point you should be taken to the welcome page of the web-app. If you enc
 ## Heroku Deployment
 - The deployment to Heroku can be found [here](https://little-esty-shop-2110.herokuapp.com/)
 
-## Phases
-
-1. [Database Setup](./doc/db_setup.md)
-1. [User Stories](./doc/user_stories.md)
-1. [Extensions](./doc/extensions.md)
-1. [Evaluation](./doc/evaluation.md)
-
-## **Contributors** ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+## **Contributor** ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/arnaldoaparicio"><img src="https://avatars.githubusercontent.com/u/88012780?v=4" width="100px;" alt=""/><br /><sub><b>Arnaldo (he/him)</b></sub></a><br /><a href="https://github.com/tjroeder/little-esty-shop/commits?author=arnaldoaparicio" title="Code">💻</a> <a href="#ideas-arnaldoaparicio" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/tjroeder/little-esty-shop/commits?author=arnaldoaparicio" title="Tests">⚠️</a> <a href="https://github.com/tjroeder/little-esty-shop/pulls?q=is%3Apr+reviewed-by%3Ajarnaldoaparicio" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/echon006"><img src="https://avatars.githubusercontent.com/u/89038271?v=4" width="100px;" alt=""/><br /><sub><b>Eric (he/him)</b></sub></a><br /><a href="https://github.com/tjroeder/little-esty-shop/commits?author=echon006" title="Code">💻</a> <a href="#ideas-echon006" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/tjroeder/little-esty-shop/commits?author=echon006" title="Tests">⚠️</a> <a href="https://github.com/tjroeder/little-esty-shop/pulls?q=is%3Apr+reviewed-by%3Ajechon006" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/tjroeder"><img src="https://avatars.githubusercontent.com/u/78194232?v=4" width="100px;" alt=""/><br /><sub><b>Tim (he/him)</b></sub></a><br /><a href="https://github.com/tjroeder/little-esty-shop/commits?author=tjroeder" title="Code">💻</a> <a href="#ideas-tjroeder" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/tjroeder/little-esty-shop/commits?author=tjroeder" title="Tests">⚠️</a> <a href="https://github.com/tjroeder/little-esty-shop/pulls?q=is%3Apr+reviewed-by%3Atjroeder" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/wadenaughton"><img src="https://avatars.githubusercontent.com/u/90228086?v=4" width="100px;" alt=""/><br /><sub><b>Wade (he/him)</b></sub></a><br /><a href="https://github.com/tjroeder/little-esty-shop/commits?author=wadenaughton" title="Code">💻</a> <a href="#ideas-wadenaughton" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/tjroeder/little-esty-shop/commits?author=wadenaughton" title="Tests">⚠️</a> <a href="https://github.com/tjroeder/little-esty-shop/pulls?q=is%3Apr+reviewed-by%3Ajwadenaughton" title="Reviewed Pull Requests">👀</a></td>
+
+    <td align="center"><a href="https://github.com/tjroeder"><img src="https://avatars.githubusercontent.com/u/78194232?v=4" width="100px;" alt=""/><br /><sub><b>Tim (he/him)</b></sub></a><br /><a href="https://github.com/tjroeder/bulk_discounts/commits?author=tjroeder" title="Code">💻</a> <a href="#ideas-tjroeder" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/tjroeder/bulk_discounts/commits?author=tjroeder" title="Tests">⚠️</a> <a href="https://github.com/tjroeder/bulk_discounts/pulls?q=is%3Apr+reviewed-by%3Atjroeder" title="Reviewed Pull Requests">👀</a></td>
+      
+   </td>
   </tr>
 </table>
 
