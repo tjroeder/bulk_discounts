@@ -26,9 +26,16 @@ RSpec.describe Discount, type: :model do
 
     it 'creates valid attributes' do
       example = build(:discount, percent: 20, threshold: 7)
-
       expect(example).to have_attributes(percent: 20)
       expect(example).to have_attributes(threshold: 7)
+    end
+
+    it 'will create discounts that are between 1-99 percent off' do
+      FactoryBot.rewind_sequences
+      example = build_list(:discount, 101)
+
+      expect(example[0].percent).to eq(1)
+      expect(example[99].percent).to eq(1)
     end
   end
 end
