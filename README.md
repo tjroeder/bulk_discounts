@@ -149,9 +149,7 @@ At this point you should be taken to the welcome page of the web-app. If you enc
 <!-- markdownlint-disable -->
 <table>
   <tr>
-
     <td align="center"><a href="https://github.com/tjroeder"><img src="https://avatars.githubusercontent.com/u/78194232?v=4" width="100px;" alt=""/><br /><sub><b>Tim (he/him)</b></sub></a><br /><a href="https://github.com/tjroeder/bulk_discounts/commits?author=tjroeder" title="Code">💻</a> <a href="#ideas-tjroeder" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/tjroeder/bulk_discounts/commits?author=tjroeder" title="Tests">⚠️</a> <a href="https://github.com/tjroeder/bulk_discounts/pulls?q=is%3Apr+reviewed-by%3Atjroeder" title="Reviewed Pull Requests">👀</a></td>
-      
    </td>
   </tr>
 </table>
