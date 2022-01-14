@@ -24,7 +24,7 @@ This project is an extension of the Little Esty Shop group project. You will add
 
 ## Schema
 - See image below for project database schema:
-![image](https://user-images.githubusercontent.com/78194232/149197741-b873de21-7732-4b1f-9706-6a0b0014c978.png)
+![image](https://user-images.githubusercontent.com/78194232/149591833-685c36fa-cf86-40d8-bde1-d3eba5a3210e.png)
 
 ## Requirements and Setup (for Mac):
 
