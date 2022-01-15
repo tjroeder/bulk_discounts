@@ -1,0 +1,8 @@
+<h1><%= @merch.name %>'s' Discount Page</h1>
+
+<h2>Discount List</h2>
+<ul>
+  <% @discs.each do |disc| %>
+    <li id="discount-<%= disc.id %>"><%= disc.percent %>% off <%= disc.threshold %> or more items - <%= link_to 'View Discount', [@merch, disc] %></li>
+  <% end %>
+</ul>
