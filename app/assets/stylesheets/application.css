@@ -13,3 +13,8 @@
  *= require_tree .
  *= require_self
  */
+
+ .flash-alert {
+  border: solid red 4px;
+  align-content: center;
+}

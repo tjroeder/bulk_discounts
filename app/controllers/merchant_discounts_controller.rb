@@ -14,9 +14,14 @@ class MerchantDiscountsController < ApplicationController
 
   def create
     merch = Merchant.find(discount_params[:merchant_id])
-    merch.discounts.create!(discount_params[:discount])
+    discount = merch.discounts.new(discount_params[:discount])
 
-    redirect_to merchant_discounts_path(merch)
+    if discount.save 
+      redirect_to merchant_discounts_path(merch)
+    else
+      redirect_to new_merchant_discount_path(merch)
+      flash[:alert] = "Error: #{error_message(discount.errors)}"
+    end
   end
 
   private
