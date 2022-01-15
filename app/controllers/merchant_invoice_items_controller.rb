@@ -1,4 +1,4 @@
-class InvoiceItemsController < ApplicationController
+class MerchantInvoiceItemsController < ApplicationController
   def update
     @merchant = Merchant.find(set_merchant[:merchant_id])
     invoice_item = InvoiceItem.find(set_invoice_item[:id])
