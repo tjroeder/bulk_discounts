@@ -1,14 +1,26 @@
 class Merchant < ApplicationRecord
+  # Relationships
   has_many :items
   has_many :discounts
   has_many :invoice_items, through: :items
   has_many :invoices, through: :invoice_items
   has_many :customers, through: :invoices
   has_many :transactions, through: :invoices
-
+  
+  # Validations
   validates :name, presence: true
+  
+  # Class Methods
+  def self.top_five_merchants
+     joins({invoice_items: {invoice: :transactions}})
+      .where(transactions: { result: 2 })
+      .select('merchants.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue')
+      .group(:id)
+      .order(revenue: :desc)
+      .limit(5)
+  end
 
-
+  # Instance Methods
   def disabled_items
     items.where(status: "Disabled")
   end
@@ -49,19 +61,7 @@ class Merchant < ApplicationRecord
          .limit(5)
   end
 
-  def self.top_five_merchants
-
-     joins({invoice_items: {invoice: :transactions}})
-    .where(transactions: { result: 2 })
-    .select('merchants.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue')
-    .group(:id)
-    .order(revenue: :desc)
-    .limit(5)
-
-  end
-
   def best_sales
-
   invoices.joins(:transactions, :invoice_items)
           .where(transactions: {result: 2})
           .group(:id)
