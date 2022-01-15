@@ -8,6 +8,10 @@ class MerchantDiscountsController < ApplicationController
     @disc = Discount.find(set_discount[:id])
   end
 
+  def new
+    @merch = Merchant.find(params[:merchant_id])
+  end
+
   private
 
   def set_discount
