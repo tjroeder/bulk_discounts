@@ -21,7 +21,7 @@ RSpec.describe 'discounts/index.html.erb', type: :feature do
     end
 
     describe 'clickable page elements' do
-      it 'discounts have links that redirect to their show pages' do
+      it 'has discounts links that redirect to their show pages' do
         within("#discount-#{disc_1.id}") do
           click_link 'View Discount'
         end
@@ -38,6 +38,14 @@ RSpec.describe 'discounts/index.html.erb', type: :feature do
           click_link 'View Discount'
         end
         expect(page).to have_current_path(merchant_discount_path(merch_1, disc_3))
+      end
+
+      it 'has a link to redirect to create new merchant discounts' do
+        expect(page).to have_link('Create New Discount', href: new_merchant_discount_path(merch_1))
+
+        click_link('Create New Discount')
+
+        expect(page).to have_current_path(new_merchant_discount_path(merch_1))
       end
     end
   end
