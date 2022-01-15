@@ -24,6 +24,18 @@ RSpec.describe 'merchants/discounts/new.html.erb', type: :feature do
         expect(page).to have_current_path(merchant_discounts_path(merch_1))
         expect(page).to have_content("#{new_discount.percent}% off #{new_discount.threshold} or more items")
       end
+
+      it 'redirects back to create new discount if given invalid data' do
+        fill_in 'discount_percent', with: 101
+        fill_in 'discount_threshold', with: 0
+        click_button 'Create Discount'
+
+        expect(page).to have_current_path(new_merchant_discount_path(merch_1))
+        
+        within('#flash-alert') do
+          expect(page).to have_content('Error: Percent must be less than 100, Threshold must be greater than 0')
+        end
+      end
     end
   end
 end
