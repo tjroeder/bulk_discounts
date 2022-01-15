@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get '/', to: 'welcome#index'
   resources :merchants do
-    resources :dashboard, only: [:index]
+    resources :dashboard, only: [:index], controller: :merchant_dashboard
     resources :discounts, only: [:index, :show], controller: :merchant_discounts
     resources :items
     resources :invoices, only: [:index, :show]
