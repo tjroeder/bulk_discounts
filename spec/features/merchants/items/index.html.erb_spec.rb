@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "items/index", type: :feature do
-
-
   before(:each) do
     @merchant_1 = Merchant.create!(name: "Joe Shmoe")
     @merchant_2 = Merchant.create!(name: "Jane Shmoe")
