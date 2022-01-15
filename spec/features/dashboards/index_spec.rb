@@ -55,7 +55,7 @@ RSpec.describe 'merchant dashboard page', type: :feature do
 
   before(:each) { visit merchant_dashboard_index_path(merch_1) }
   
-  describe 'as a user' do
+  context 'as a merchant' do
     describe 'view elements' do
       it 'displays the merchants name' do
         expect(page).to have_content(merch_1.name)
