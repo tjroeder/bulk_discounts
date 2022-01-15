@@ -4,7 +4,8 @@
 <h2>Discount List</h2>
 <ul>
   <% @discs.each do |disc| %>
-    <li id="discount-<%= disc.id %>"><%= disc.percent %>% off <%= disc.threshold %> or more items
+    <li id="discount-<%= disc.id %>">
+    <%= disc.percent %>% off <%= disc.threshold %> or more items
     <%= button_to 'View Discount', [@merch, disc], method: :get -%>
     <%= button_to 'Delete Discount', [@merch, disc], method: :delete -%>
     </li>
