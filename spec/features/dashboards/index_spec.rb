@@ -54,31 +54,13 @@ RSpec.describe 'merchant dashboard page', type: :feature do
   let!(:transactions_12) { Transaction.create!(invoice_id: invoice_6.id, credit_card_number: "4654405418240012", credit_card_expiration_date: "0012", result: 1)}
 
   before(:each) { visit merchant_dashboard_index_path(merch_1) }
-
+  
   describe 'as a user' do
     describe 'view elements' do
       it 'displays the merchants name' do
         expect(page).to have_content(merch_1.name)
       end
-    end
-
-    describe 'view links' do
-      it "displays link to merchant item index " do
-        expect(page).to have_link("Merchant Items")
-        
-        click_link "Merchant Items"
-        
-        expect(current_path).to eq(merchant_items_path(merch_1))
-      end
-
-      it "displays link to merchant invoices index" do
-        expect(page).to have_link("Merchant Invoices")
-        
-        click_link "Merchant Invoices"
-
-        expect(current_path).to eq(merchant_invoices_path(merch_1))
-      end
-
+      
       it "shows the name of top 5 customers who have conducted the largest number of succesful transactions" do
         expect(page).to have_content("Top Five Customers:")
         expect(cust_1.first_name).to appear_before(cust_2.first_name)
@@ -86,8 +68,8 @@ RSpec.describe 'merchant dashboard page', type: :feature do
         expect(cust_3.first_name).to appear_before(cust_6.first_name)
         expect(cust_6.first_name).to_not appear_before(cust_2.first_name)
       end
-
-      it "shows the count of succesfull transactions for the top 5 customers" do
+      
+      it "shows the count of succesful transactions for the top 5 customers" do
         expect(page).to have_content("Count of Transactions:")
         expect("Count of Transactions: 2").to appear_before("Count of Transactions: 1")
         expect(page).to have_content(1)
@@ -100,22 +82,40 @@ RSpec.describe 'merchant dashboard page', type: :feature do
         expect(page).to have_content(item_3.name)
         expect(page).to have_content(item_5.name)
       end
-
+    
       it "shows the items invoice ids" do
         expect(page).to have_content("Invoice id# #{item_2.invoices.ids.first}" )
         expect(page).to have_content("Invoice id# #{item_3.invoices.ids.first}")
         expect(page).to have_content("Invoice id# #{item_5.invoices.ids.first}")
       end
 
-      it "has a link for the invoice id that leads to the invoice show page" do
-        click_link "#{item_2.invoices.ids.first}"
-        
-        expect(current_path).to eq("/merchants/#{merch_1.id}/invoices/#{item_2.invoices.ids.first}")
-      end
-
       it "shows the items in order of invoice tiem created" do
         expect(item_2.name).to appear_before(item_5.name)
         expect(item_5.name).to appear_before(item_3.name)
+      end
+    end
+
+    describe 'clickable page elements' do
+      it "displays link that redirects to merchant item index " do
+        expect(page).to have_link("Merchant Items")
+        
+        click_link "Merchant Items"
+        
+        expect(current_path).to eq(merchant_items_path(merch_1))
+      end
+
+      it "displays link that redirects to merchant invoices index" do
+        expect(page).to have_link("Merchant Invoices")
+        
+        click_link "Merchant Invoices"
+
+        expect(current_path).to eq(merchant_invoices_path(merch_1))
+      end
+
+      it "has a link on invoice id that redirects to the invoice show page" do
+        click_link "#{item_2.invoices.ids.first}"
+        
+        expect(current_path).to eq("/merchants/#{merch_1.id}/invoices/#{item_2.invoices.ids.first}")
       end
     end
   end
