@@ -1,30 +1,30 @@
 class MerchantDiscountsController < ApplicationController
-  before_action :find_merchant, only: [:index, :new, :create, :destroy]
-  
+  before_action :find_merchant, only: [:index, :show, :new, :create, :destroy]
+  before_action :find_discount, only: [:show, :destroy]
+
   def index
     @discs = @merch.discounts
   end
 
   def show
-    @disc = Discount.find(params[:id])
   end
 
   def new
   end
   
   def create
-    discount = @merch.discounts.new(discount_params[:discount])
+    new_discount = @merch.discounts.new(discount_params[:discount])
     
-    if discount.save 
+    if new_discount.save 
       redirect_to merchant_discounts_path(@merch)
     else
       redirect_to new_merchant_discount_path(@merch)
-      flash[:alert] = "Error: #{error_message(discount.errors)}"
+      flash[:alert] = "Error: #{error_message(new_discount.errors)}"
     end
   end
   
   def destroy
-    Discount.find(discount_params[:id]).destroy
+    @disc.destroy
 
     redirect_to merchant_discounts_path(@merch)
   end
@@ -32,7 +32,13 @@ class MerchantDiscountsController < ApplicationController
   private
 
   def find_merchant
-    @merch = Merchant.find(params.permit(:merchant_id)[:merchant_id])
+    id = params.permit(:merchant_id)[:merchant_id]
+    @merch = Merchant.find(id)
+  end
+
+  def find_discount
+    id = params.permit(:id)[:id]
+    @disc = Discount.find(id)
   end
 
   def discount_params
