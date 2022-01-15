@@ -1,21 +1,21 @@
-<style>
-  .header {
-    padding: 10px;
-    text-align: left;
-    background: #1abc9c;
-    color: white;
-    font-size: 20px;
-  }
-</style>
+// <style>
+//   .header {
+//     padding: 10px;
+//     text-align: left;
+//     background: #1abc9c;
+//     color: white;
+//     font-size: 20px;
+//   }
+// </style>
 
-<div class="header">
- <%service = GithubSearch.new%>
- <% repo = service.repo_info%>
- <p><%= repo.name%></p>
+// <div class="header">
+//  <%service = GithubSearch.new%>
+//  <% repo = service.repo_info%>
+//  <p><%= repo.name%></p>
 
- <% repo.teammates.each do |contributor| %>
-<p id="contributor-<%= contributor.id %>"> <%= contributor.login %> - Number of commits: <%= contributor.commits.count %> %></p>
-<% end %>
+//  <% repo.teammates.each do |contributor| %>
+// <p id="contributor-<%= contributor.id %>"> <%= contributor.login %> - Number of commits: <%= contributor.commits.count %> %></p>
+// <% end %>
 
-Number of pull requests: 
-</div>
+// Number of pull requests: 
+// </div>
