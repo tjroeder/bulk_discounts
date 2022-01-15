@@ -1,7 +1,7 @@
 require 'rails_helper'
-RSpec.describe 'admin merchants index dashboard page', type: :feature do
 
-  describe 'as an admin' do
+RSpec.describe 'admin merchants index dashboard page', type: :feature do
+  context 'as an admin' do
     describe 'name of every merchant' do
       it 'displays header for admin dashboard' do
         merch_1 = Merchant.create!(name: 'name_1')
@@ -12,7 +12,7 @@ RSpec.describe 'admin merchants index dashboard page', type: :feature do
         expect(page).to have_content(merch_2.name)
       end
     end
-  end
+
     describe 'link to admin merchant show page' do
       it "links to the admin merchant show page" do
         merch_1 = Merchant.create!(name: 'name_1')
@@ -23,6 +23,7 @@ RSpec.describe 'admin merchants index dashboard page', type: :feature do
         expect(current_path).to eq(admin_merchant_path(merch_1))
       end
     end
+
     describe 'Link to create a new merchant' do
       it "links to new page to create new merchant" do
         merch_1 = Merchant.create!(name: 'name_1')
@@ -34,6 +35,7 @@ RSpec.describe 'admin merchants index dashboard page', type: :feature do
         expect(current_path).to eq(new_admin_merchant_path)
       end
     end
+
     describe 'enable and disable of merchants' do
       it "enables or disbales merchants depending on status" do
         merch_1 = Merchant.create!(name: 'name_1')
@@ -71,8 +73,8 @@ RSpec.describe 'admin merchants index dashboard page', type: :feature do
         expect(page).to have_content(merchants[1].name)
         expect(page).to have_content(merchants[3].name)
         expect(page).to have_content(merchants[4].name)
-
       end
+
       it "shows date of best revenue day" do
         merchant = Merchant.create!(name: 'name_3')
 
@@ -97,4 +99,5 @@ RSpec.describe 'admin merchants index dashboard page', type: :feature do
         expect(page).to_not have_content('Saturday, January 15, 2022')
       end
     end
+  end
 end
