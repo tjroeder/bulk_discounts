@@ -25,7 +25,6 @@ FactoryBot.define do
             invoice.reload
             invoice_item.reload
           end
-          count += 1
         end
       end
     end
