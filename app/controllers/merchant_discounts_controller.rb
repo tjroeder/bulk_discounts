@@ -1,6 +1,6 @@
 class MerchantDiscountsController < ApplicationController
-  before_action :find_merchant, only: [:index, :show, :new, :create, :destroy]
-  before_action :find_discount, only: [:show, :destroy]
+  before_action :find_merchant
+  before_action :find_discount, only: [:show, :edit, :update, :destroy]
 
   def index
     @discs = @merch.discounts
