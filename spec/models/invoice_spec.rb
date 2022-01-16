@@ -33,14 +33,12 @@ RSpec.describe Invoice, type: :model do
   let!(:item_9) { Item.create!(name: 'item_9', description: 'desc_9', unit_price: 9, merchant: merch_1) }
   let!(:item_10) { Item.create!(name: 'item_10', description: 'desc_10', unit_price: 10, merchant: merch_1) }
 
-
   let!(:invoice_1) { create(:invoice, status: 2, customer: cust_1, created_at: DateTime.new(2022, 1, 5, 0 , 0, 0)) }
   let!(:invoice_2) { create(:invoice, status: 2, customer: cust_2, created_at: DateTime.new(2021, 1, 5, 0 , 0, 0)) }
   let!(:invoice_5) { create(:invoice, status: 2, customer: cust_5) }
   let!(:invoice_4) { create(:invoice, status: 2, customer: cust_4) }
   let!(:invoice_3) { create(:invoice, status: 2, customer: cust_3) }
   let!(:invoice_6) { create(:invoice, status: 2, customer: cust_6) }
-
 
   let!(:ii_1) { InvoiceItem.create!(item: item_1, invoice: invoice_1, quantity: 1, unit_price: 1, status: 0) }
   let!(:ii_2) { InvoiceItem.create!(item: item_2, invoice: invoice_2, quantity: 2, unit_price: 2, status: 1) }
@@ -49,7 +47,6 @@ RSpec.describe Invoice, type: :model do
   let!(:ii_5) { InvoiceItem.create!(item: item_5, invoice: invoice_5, quantity: 3, unit_price: 5, status: 1) }
   let!(:ii_6) { InvoiceItem.create!(item: item_6, invoice: invoice_6, quantity: 3, unit_price: 6, status: 2) }
   # let!(:ii_7) { InvoiceItem.create!(item: item_7, invoice: invoice_7, quantity: 3, unit_price: 7, status: 2) }
-
 
   let!(:transactions_1) { Transaction.create!(invoice_id: invoice_1.id, credit_card_number: "4654405418240001", credit_card_expiration_date: "0001", result: 2)}
   let!(:transactions_2) { Transaction.create!(invoice_id: invoice_1.id, credit_card_number: "4654405418240002", credit_card_expiration_date: "0002", result: 2)}
@@ -63,7 +60,6 @@ RSpec.describe Invoice, type: :model do
   let!(:transactions_10) { Transaction.create!(invoice_id: invoice_5.id, credit_card_number: "4654405418240010", credit_card_expiration_date: "0010", result: 1)}
   let!(:transactions_11) { Transaction.create!(invoice_id: invoice_6.id, credit_card_number: "4654405418240011", credit_card_expiration_date: "0011", result: 2)}
   let!(:transactions_12) { Transaction.create!(invoice_id: invoice_6.id, credit_card_number: "4654405418240012", credit_card_expiration_date: "0012", result: 1)}
-
 
   describe 'class methods' do
     describe '::incomplete_list' do
