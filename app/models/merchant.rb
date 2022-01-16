@@ -12,11 +12,12 @@ class Merchant < ApplicationRecord
   validates :name, presence: true
   
   # Class Methods
+  scope :join_trans, -> { joins({invoice_items: {invoice: :transactions}}) }
+
   def self.top_five_merchants
-     joins({invoice_items: {invoice: :transactions}})
-      .where(transactions: { result: 2 })
-      .select('merchants.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue')
-      .group(:id)
+      join_trans.merge(Transaction.successful)
+      .merge(InvoiceItem.total_revenue)
+      .select('merchants.*')
       .order(revenue: :desc)
       .limit(5)
   end
