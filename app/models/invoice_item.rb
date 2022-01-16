@@ -7,5 +7,5 @@ class InvoiceItem < ApplicationRecord
   validates :unit_price, presence: true
 
   # Class methods
-  scope :total_revenue, -> { select('SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue').group(:id) }
+  scope :total_revenue, -> { select('SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue').group('invoice_items.id') }
 end
