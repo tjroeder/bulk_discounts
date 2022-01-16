@@ -99,7 +99,7 @@ RSpec.describe Invoice, type: :model do
       end
     end
 
-    describe  '#Items ready to ship' do
+    describe  '#items_ready_ship' do
       it "returns all the items ready to ship for a merchant" do
         invoice = create(:invoice)
         invoice_items = create_list(:invoice_item, 3, status: 1, invoice: invoice)
