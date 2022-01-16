@@ -22,6 +22,18 @@ class MerchantDiscountsController < ApplicationController
       flash[:alert] = "Error: #{error_message(new_discount.errors)}"
     end
   end
+
+  def edit
+  end
+  
+  def update
+    if @disc.update(discount_params[:discount])
+      redirect_to merchant_discounts_path(@merch)
+    else
+      redirect_to edit_merchant_discount_path(@merch, @disc)
+      flash[:alert] = "Error: #{error_message(@disc.errors)}"
+    end
+  end
   
   def destroy
     @disc.destroy
