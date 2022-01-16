@@ -8,4 +8,6 @@ class InvoiceItem < ApplicationRecord
 
   # Class methods
   scope :total_revenue, -> { select('SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue').group(:id) }
+
+  scope :not_shipped, -> { where('invoice_items.status != ?', 2) }
 end
