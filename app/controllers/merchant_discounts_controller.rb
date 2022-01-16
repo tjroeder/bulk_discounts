@@ -1,6 +1,6 @@
 class MerchantDiscountsController < ApplicationController
-  before_action :find_merchant, only: [:index, :show, :new, :create, :destroy]
-  before_action :find_discount, only: [:show, :destroy]
+  before_action :find_merchant
+  before_action :find_discount, only: [:show, :edit, :update, :destroy]
 
   def index
     @discs = @merch.discounts
@@ -20,6 +20,18 @@ class MerchantDiscountsController < ApplicationController
     else
       redirect_to new_merchant_discount_path(@merch)
       flash[:alert] = "Error: #{error_message(new_discount.errors)}"
+    end
+  end
+
+  def edit
+  end
+  
+  def update
+    if @disc.update(discount_params[:discount])
+      redirect_to merchant_discounts_path(@merch)
+    else
+      redirect_to edit_merchant_discount_path(@merch, @disc)
+      flash[:alert] = "Error: #{error_message(@disc.errors)}"
     end
   end
   

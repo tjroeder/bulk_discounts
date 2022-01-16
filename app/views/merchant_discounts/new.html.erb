@@ -1,10 +1,5 @@
 <h1>Create New Discount for <%= @merch.name %></h1>
-<%= form_with model: [@merch, Discount.new], local: true do |f| %>
-  <%= f.label 'Percent Discount: ' %>
-  <%= f.number_field :percent, within: 1..99 %>
-
-  <%= f.label 'Quantity Threshold: ' %>
-  <%= f.number_field :threshold, min: 1 %>
-  <br>
-  <%= f.submit 'Create Discount' %>
-<% end %>
+<%= render partial: 'form', locals: {
+                                     discount: Discount.new, 
+                                     button_text: 'Create Discount'
+                                    } %>

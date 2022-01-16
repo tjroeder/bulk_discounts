@@ -1,0 +1,5 @@
+<h1>Edit Discount #<%= @disc.id %> for <%= @merch.name %></h1>
+<%= render partial: 'form', locals: {
+                                     discount: @disc, 
+                                     button_text: 'Save Discount'
+                                    } %>
