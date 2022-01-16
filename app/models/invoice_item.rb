@@ -6,5 +6,6 @@ class InvoiceItem < ApplicationRecord
   validates :quantity, presence: true
   validates :unit_price, presence: true
 
-
+  # Class methods
+  scope :total_revenue, -> { sum('unit_price * quantity') }
 end
