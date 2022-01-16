@@ -12,8 +12,8 @@ RSpec.describe InvoiceItem, type: :model do
     it { should define_enum_for(:status).with_values(['pending', 'packaged', 'shipped']) }
   end
 
-  describe 'instance methods' do
-    describe '#total_revenue' do
+  describe 'class methods' do
+    describe '::total_revenue' do
       it 'returns quantity multiplied by unit price for each invoice item' do
         invoice_item_1 = create(:invoice_item, quantity: 4, unit_price: 500)
         invoice_items = create_list(:invoice_item, 2, quantity: 2, unit_price: 100)
