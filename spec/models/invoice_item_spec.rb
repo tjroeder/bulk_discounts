@@ -26,5 +26,17 @@ RSpec.describe InvoiceItem, type: :model do
         expect(examples[3].revenue).to eq(200)
       end
     end
+
+    describe '::not_shipped' do
+      it 'returns invoice items which are not shipped' do
+        invoice_item_1 = create(:invoice_item, :pending)
+        invoice_item_2 = create(:invoice_item, :shipped)
+        invoice_item_3 = create(:invoice_item, :packaged)
+        invoice_item_4 = create(:invoice_item, :pending)
+
+        expect(InvoiceItem.not_shipped).to contain_exactly(invoice_item_1, invoice_item_3, invoice_item_4)
+        expect(InvoiceItem.not_shipped).not_to contain_exactly(invoice_item_2)
+      end
+    end
   end
 end
