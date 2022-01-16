@@ -49,7 +49,6 @@ RSpec.describe 'discounts/index.html.erb', type: :feature do
       end
       
       it 'has button to delete discount and it is removed from index page' do
-        save_and_open_page
         within("#discount-#{disc_1.id}") do
           click_button 'Delete Discount'
         end
