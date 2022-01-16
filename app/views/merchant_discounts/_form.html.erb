@@ -1,0 +1,9 @@
+<%= form_with model: [@merch, discount], local: true do |f| %>
+  <%= f.label 'Percent Discount: ' %>
+  <%= f.number_field :percent, within: 1..99 %>
+
+  <%= f.label 'Quantity Threshold: ' %>
+  <%= f.number_field :threshold, min: 1 %>
+  <br>
+  <%= f.submit button_text %>
+<% end %>
