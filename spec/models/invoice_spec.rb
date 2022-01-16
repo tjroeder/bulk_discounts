@@ -10,7 +10,7 @@ RSpec.describe Invoice, type: :model do
   end
   
   describe 'validations' do
-    it { should define_enum_for(:status).with(['in progress', 'cancelled', 'completed']) }
+    it { should define_enum_for(:status).with_values(['in progress', 'cancelled', 'completed']) }
   end
   
   let!(:merch_1) { Merchant.create!(name: 'name_1') }
@@ -128,6 +128,5 @@ RSpec.describe Invoice, type: :model do
         expect(invoice_1.total_revenue).to eq('$3.00')
       end
     end
-
   end
 end
