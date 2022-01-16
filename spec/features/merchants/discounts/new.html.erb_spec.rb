@@ -22,7 +22,7 @@ RSpec.describe 'merchants/discounts/new.html.erb', type: :feature do
         new_discount = merch_1.discounts.last
 
         expect(page).to have_current_path(merchant_discounts_path(merch_1))
-        expect(page).to have_content("#{new_discount.percent}% off #{new_discount.threshold} or more items")
+        expect(page).to have_content('77% off 33 or more items')
       end
 
       it 'redirects back to create new discount if given invalid data' do
