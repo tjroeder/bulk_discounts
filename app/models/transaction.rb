@@ -5,5 +5,5 @@ class Transaction < ApplicationRecord
   validates :credit_card_number, presence: true
 
   # Class Methods
-  scope :successful, -> { where( result: 2) }
+  scope :successful, -> { where(result: 2) }
 end
