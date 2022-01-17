@@ -40,8 +40,8 @@ class Merchant < ApplicationRecord
   end
 
   def top_customers
-     transactions.joins(invoice: :customer)
-                 .where('result =?',2)
+     transactions.successful
+                 .joins(invoice: :customer)
                  .select('customers.*,count(transactions) as count_transaction')
                  .group('customers.id')
                  .order(count: :desc).limit(5)
