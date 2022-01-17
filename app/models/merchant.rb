@@ -57,19 +57,19 @@ class Merchant < ApplicationRecord
 
   def top_five_items
     items.joins({invoice_items: {invoice: :transactions}})
-          .merge(Transaction.successful)
-          .select("items.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue")
-         .group(:id)
+         .merge(Transaction.successful)
+         .merge(InvoiceItem.total_revenue)
+         .select('items.*')
          .order(revenue: :desc)
          .limit(5)
   end
 
-  def best_sales
-  invoices.joins(:transactions, :invoice_items)
-          .where(transactions: {result: 2})
-          .group(:id)
-          .select('invoices.created_at, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue')
-          .order(revenue: :desc)
-          .first
+  def best_sale
+    invoices.joins(:transactions, :invoice_items)
+            .merge(Transaction.successful)
+            .merge(InvoiceItem.total_revenue)
+            .select('invoices.created_at')
+            .order(revenue: :desc)
+            .first
   end
 end
