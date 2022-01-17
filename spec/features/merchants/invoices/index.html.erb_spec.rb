@@ -11,7 +11,6 @@ RSpec.describe "merchant invoices index page", type: :feature do
       it 'displays invoices that have atleast one merchant item' do
         expect(page).to have_content(merch_2.invoices[0].id)
         expect(page).to have_content(merch_2.invoices[1].id)
-        expect(page).to have_content(merch_2.invoices[2].id)
       end
     end
 
@@ -19,7 +18,6 @@ RSpec.describe "merchant invoices index page", type: :feature do
       it 'invoices have links to redirect to invoice show page' do
         expect(page).to have_link(merch_2.invoices[0].id.to_s)
         expect(page).to have_link(merch_2.invoices[1].id.to_s)
-        expect(page).to have_link(merch_2.invoices[2].id.to_s)
         click_link(merch_2.invoices[0].id.to_s)
 
         expect(page).to have_current_path(merchant_invoice_path(merch_2, merch_2.invoices[0]))
