@@ -18,11 +18,6 @@ RSpec.describe 'merchant invoice show page', type: :feature do
   let!(:invoice_item_4) { create(:invoice_item, item: item_4, invoice: invoice_2) }
   let!(:invoice_item_5) { create(:invoice_item, item: item_5, invoice: invoice_2) }
   let!(:invoice_item_6) { create(:invoice_item, item: item_6, invoice: invoice_2) }
-  # let(:merch_2) { create(:merch_w_all, customer_count: 2) }
-  # let(:invoice_1) { merch_2.invoices[0] }
-  # let(:invoice_2) { merch_2.invoices[1] }
-  # let(:invoice_item_1) { merch_2.invoice_items[0] }
-  # let(:invoice_item_2) { merch_2.invoice_items[1] }
 
   before(:each) { visit merchant_invoice_path(merch_1, invoice_1) }
 
@@ -67,7 +62,12 @@ RSpec.describe 'merchant invoice show page', type: :feature do
       end
 
       it 'displays total revenue for the invoice' do
-        expect(page).to have_content("Total Revenue: #{invoice_1.total_revenue}")
+        expected = h.number_to_currency(invoice_1.total_revenue.fdiv(100), precision: 0)
+        expect(page).to have_content("Total Revenue: #{expected}")
+      end
+
+      it 'displays total discounted revenue for the invoice' do
+        # expect(page).to have_content("Total Discounted Revenue: #{invoice_1.discount_revenue}")
       end
 
       it 'displays a status dropdown and update button' do
