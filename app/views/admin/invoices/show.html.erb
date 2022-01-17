@@ -10,8 +10,8 @@
   <p> Status: <%= form.select :status, ['in progress', 'cancelled', 'completed'] %> <%= form.submit 'Update Invoice Status' %></p>
 <% end %>
 <h2>Items: <% @invoice.invoice_items.each do |ii| %> </h2>
-  <h4> <%= ii.item.name %> </h4>
-    <p> Quantity ordered: <%= ii.quantity %> </p>
-    <p> Price Item sold for: <%= cents_to_dollars(ii.unit_price) %></p>
-    <p> Status: <%= ii.status %></p>
-  <% end  %>
+  <h4><%= ii.item.name %></h4>
+    <p>Quantity ordered: <%= ii.quantity %> </p>
+    <p>Price Item sold for: <%= cents_to_dollars(ii.unit_price) %></p>
+    <p>Status: <%= ii.status %></p>
+<% end  %>
