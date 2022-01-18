@@ -28,7 +28,7 @@ class MerchantDiscountsController < ApplicationController
   
   def update
     if @disc.update(discount_params[:discount])
-      redirect_to merchant_discounts_path(@merch)
+      redirect_to merchant_discount_path(@merch, @disc)
     else
       redirect_to edit_merchant_discount_path(@merch, @disc)
       flash[:alert] = "Error: #{error_message(@disc.errors)}"

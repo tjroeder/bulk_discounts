@@ -10,7 +10,9 @@ class Invoice < ApplicationRecord
 
   # Class Methods
   def self.incomplete_list
-    joins(:invoice_items).where('invoice_items.status != ?', 2).select('invoices.*').group('invoices.id')
+    joins(:invoice_items).merge(InvoiceItem.not_shipped)
+                         .select('invoices.*')
+                         .group('invoices.id')
   end
 
   def self.order_created_at
@@ -30,7 +32,15 @@ class Invoice < ApplicationRecord
     invoice_items.where('invoice_items.status = ?', 1)
   end
 
-  def total_revenue
-    cents_to_dollars(invoice_items.sum('unit_price * quantity'))
+  def ii_filtered_by_merch(merch_id)
+    invoice_items.joins(:merchant).where(merchants: { id: merch_id })
+  end
+
+  def pre_discount_revenue(merch_id)
+    ii_filtered_by_merch(merch_id).sum('invoice_items.unit_price * invoice_items.quantity')
+  end
+
+  def discounted_revenue(merch_id)
+    ii_filtered_by_merch(merch_id).sum(&:line_item_revenue)
   end
 end

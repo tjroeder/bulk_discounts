@@ -12,11 +12,12 @@ class Merchant < ApplicationRecord
   validates :name, presence: true
   
   # Class Methods
+  scope :join_trans, -> { joins({invoice_items: {invoice: :transactions}}) }
+
   def self.top_five_merchants
-     joins({invoice_items: {invoice: :transactions}})
-      .where(transactions: { result: 2 })
-      .select('merchants.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue')
-      .group(:id)
+      join_trans.merge(Transaction.successful)
+      .merge(InvoiceItem.total_revenue)
+      .select('merchants.*')
       .order(revenue: :desc)
       .limit(5)
   end
@@ -39,8 +40,8 @@ class Merchant < ApplicationRecord
   end
 
   def top_customers
-     transactions.joins(invoice: :customer)
-                 .where('result =?',2)
+     transactions.successful
+                 .joins(invoice: :customer)
                  .select('customers.*,count(transactions) as count_transaction')
                  .group('customers.id')
                  .order(count: :desc).limit(5)
@@ -56,18 +57,19 @@ class Merchant < ApplicationRecord
 
   def top_five_items
     items.joins({invoice_items: {invoice: :transactions}})
-         .select("items.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue")
-         .group(:id).where(transactions: {result: 2})
+         .merge(Transaction.successful)
+         .merge(InvoiceItem.total_revenue)
+         .select('items.*')
          .order(revenue: :desc)
          .limit(5)
   end
 
-  def best_sales
-  invoices.joins(:transactions, :invoice_items)
-          .where(transactions: {result: 2})
-          .group(:id)
-          .select('invoices.created_at, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue')
-          .order(revenue: :desc)
-          .first
+  def best_sale
+    invoices.joins(:transactions, :invoice_items)
+            .merge(Transaction.successful)
+            .merge(InvoiceItem.total_revenue)
+            .select('invoices.created_at')
+            .order(revenue: :desc)
+            .first
   end
 end

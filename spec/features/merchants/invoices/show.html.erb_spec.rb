@@ -2,13 +2,16 @@ require 'rails_helper'
 
 RSpec.describe 'merchant invoice show page', type: :feature do
   let!(:merch_1) { create(:merchant) }
+  let!(:discount_1) { create(:discount, threshold: 10, percent: 24 ) }
+  let!(:discount_2) { create(:discount, threshold: 4, percent: 10 ) }
+  let!(:discount_2) { create(:discount, threshold: 3, percent: 20 ) }
   let!(:item_1) { create(:item, merchant: merch_1) }
   let!(:item_2) { create(:item, merchant: merch_1) }
   let!(:item_3) { create(:item, merchant: merch_1) }
   let!(:invoice_1) { create(:invoice) }
-  let!(:invoice_item_1) { create(:invoice_item, item: item_1, invoice: invoice_1) }
-  let!(:invoice_item_2) { create(:invoice_item, item: item_2, invoice: invoice_1) }
-  let!(:invoice_item_3) { create(:invoice_item, item: item_3, invoice: invoice_1) }
+  let!(:invoice_item_1) { create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 5, unit_price: 10) }
+  let!(:invoice_item_2) { create(:invoice_item, item: item_2, invoice: invoice_1, quantity: 8, unit_price: 12) }
+  let!(:invoice_item_3) { create(:invoice_item, item: item_3, invoice: invoice_1, quantity: 4, unit_price: 10) }
 
   let!(:merch_2) { create(:merchant) }
   let!(:item_4) { create(:item, merchant: merch_2) }
@@ -18,11 +21,6 @@ RSpec.describe 'merchant invoice show page', type: :feature do
   let!(:invoice_item_4) { create(:invoice_item, item: item_4, invoice: invoice_2) }
   let!(:invoice_item_5) { create(:invoice_item, item: item_5, invoice: invoice_2) }
   let!(:invoice_item_6) { create(:invoice_item, item: item_6, invoice: invoice_2) }
-  # let(:merch_2) { create(:merch_w_all, customer_count: 2) }
-  # let(:invoice_1) { merch_2.invoices[0] }
-  # let(:invoice_2) { merch_2.invoices[1] }
-  # let(:invoice_item_1) { merch_2.invoice_items[0] }
-  # let(:invoice_item_2) { merch_2.invoice_items[1] }
 
   before(:each) { visit merchant_invoice_path(merch_1, invoice_1) }
 
@@ -67,7 +65,17 @@ RSpec.describe 'merchant invoice show page', type: :feature do
       end
 
       it 'displays total revenue for the invoice' do
-        expect(page).to have_content("Total Revenue: #{invoice_1.total_revenue}")
+        rev = invoice_1.pre_discount_revenue(merch_1.id)
+        expected = h.number_to_currency(rev.fdiv(100))
+
+        expect(page).to have_content("Total Revenue: #{expected}")
+      end
+      
+      it 'displays total discounted revenue for the invoice' do
+        rev = invoice_1.discounted_revenue(merch_1.id)
+        expected = h.number_to_currency(rev.fdiv(100))
+        save_and_open_page
+        expect(page).to have_content("Total Discounted Revenue: #{expected}")
       end
 
       it 'displays a status dropdown and update button' do

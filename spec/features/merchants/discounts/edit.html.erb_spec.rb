@@ -21,8 +21,9 @@ RSpec.describe 'merchants/discounts/edit.html.erb', type: :feature do
         fill_in 'discount_threshold', with: 33
         click_button 'Save Discount'
 
-        expect(page).to have_current_path(merchant_discounts_path(merch_1))
-        expect(page).to have_content('77% off 33 or more items')
+        expect(page).to have_current_path(merchant_discount_path(merch_1, disc_1))
+        expect(page).to have_content("Percent off: 77%")
+        expect(page).to have_content("Threshold Quantity: 33")
       end
 
       it 'redirects back to edit discount if given invalid data' do
