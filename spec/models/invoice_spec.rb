@@ -14,7 +14,13 @@ RSpec.describe Invoice, type: :model do
   end
   
   let!(:merch_1) { Merchant.create!(name: 'name_1') }
+  let!(:merch_2) { Merchant.create!(name: 'name_2') }
 
+  let!(:disc_1) { create(:discount, threshold: 2, percent: 10, merchant: merch_1) }
+  let!(:disc_2) { create(:discount, threshold: 5, percent: 20, merchant: merch_1) }
+  let!(:disc_3) { create(:discount, threshold: 10, percent: 50, merchant: merch_1) }
+  let!(:disc_4) { create(:discount, threshold: 2, percent: 10, merchant: merch_2) }
+  
   let!(:cust_1) { Customer.create!(first_name: 'fn_1', last_name: 'ln_1') }
   let!(:cust_2) { Customer.create!(first_name: 'fn_2', last_name: 'ln_2') }
   let!(:cust_3) { Customer.create!(first_name: 'fn_3', last_name: 'ln_3') }
@@ -32,6 +38,8 @@ RSpec.describe Invoice, type: :model do
   let!(:item_8) { Item.create!(name: 'item_8', description: 'desc_8', unit_price: 8, merchant: merch_1) }
   let!(:item_9) { Item.create!(name: 'item_9', description: 'desc_9', unit_price: 9, merchant: merch_1) }
   let!(:item_10) { Item.create!(name: 'item_10', description: 'desc_10', unit_price: 10, merchant: merch_1) }
+  let!(:item_11) { Item.create!(name: 'item_11', description: 'desc_11', unit_price: 11, merchant: merch_2) }
+  let!(:item_12) { Item.create!(name: 'item_12', description: 'desc_12', unit_price: 12, merchant: merch_1) }
 
   let!(:invoice_1) { create(:invoice, status: 2, customer: cust_1, created_at: DateTime.new(2022, 1, 5, 0 , 0, 0)) }
   let!(:invoice_2) { create(:invoice, status: 2, customer: cust_2, created_at: DateTime.new(2021, 1, 5, 0 , 0, 0)) }
@@ -46,7 +54,8 @@ RSpec.describe Invoice, type: :model do
   let!(:ii_4) { InvoiceItem.create!(item: item_4, invoice: invoice_4, quantity: 3, unit_price: 4, status: 2) }
   let!(:ii_5) { InvoiceItem.create!(item: item_5, invoice: invoice_5, quantity: 3, unit_price: 5, status: 1) }
   let!(:ii_6) { InvoiceItem.create!(item: item_6, invoice: invoice_6, quantity: 3, unit_price: 6, status: 2) }
-  # let!(:ii_7) { InvoiceItem.create!(item: item_7, invoice: invoice_7, quantity: 3, unit_price: 7, status: 2) }
+  let!(:ii_7) { InvoiceItem.create!(item: item_11, invoice: invoice_1, quantity: 3, unit_price: 7, status: 2) }
+  let!(:ii_8) { InvoiceItem.create!(item: item_12, invoice: invoice_1, quantity: 4, unit_price: 8, status: 2) }
 
   let!(:transactions_1) { Transaction.create!(invoice_id: invoice_1.id, credit_card_number: "4654405418240001", credit_card_expiration_date: "0001", result: 2)}
   let!(:transactions_2) { Transaction.create!(invoice_id: invoice_1.id, credit_card_number: "4654405418240002", credit_card_expiration_date: "0002", result: 2)}
@@ -107,25 +116,108 @@ RSpec.describe Invoice, type: :model do
         expect(invoice.items_ready_ship).to eq([invoice_items[0], invoice_items[1], invoice_items[2]])
       end
     end
-
-    describe '#total_revenue' do
-      it 'should return the total revenue for the invoice' do
+    
+    describe '#pre_discount_revenue' do
+      it 'should return the pre discount revenue for the merchant invoice' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, merchant: merchant_1, percent: 20, threshold: 10)
         invoice_1 = create(:invoice)
-        items = create_list(:item, 3)
+        items = create_list(:item, 3, merchant: merchant_1)
         invoice_item_1 = create(:invoice_item, item: items[0], invoice: invoice_1, unit_price: 100, quantity: 2)
         invoice_item_2 = create(:invoice_item, item: items[1], invoice: invoice_1, unit_price: 200, quantity: 4)
         invoice_item_3 = create(:invoice_item, item: items[2], invoice: invoice_1, unit_price: 300, quantity: 1)
+        
+        expect(invoice_1.pre_discount_revenue(merchant_1)).to eq(1300)
+      end
+      
+      it 'should not return revenue from other items not on the invoice' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, merchant: merchant_1, percent: 20, threshold: 10)
+        invoice_1 = create(:invoice)
+        items = create_list(:item, 2, merchant: merchant_1)
+        invoice_item_1 = create(:invoice_item, item: items[0], invoice: invoice_1, unit_price: 100, quantity: 3)
+        invoice_item_2 = create(:invoice_item, item: items[1], invoice: invoice_1, unit_price: 100, quantity: 7)
+        invoice_item_3 = create(:invoice_item, unit_price: 200)
 
-        expect(invoice_1.total_revenue).to eq('$13.00')
+        expect(invoice_1.pre_discount_revenue(merchant_1)).to eq(1000)
+      end
+    end
+
+    describe '#ii_filtered_by_merch' do
+      it 'returns invoice_items_filtered_by_merch' do
+        expect(invoice_1.invoice_items).to contain_exactly(ii_1, ii_7, ii_8)
+
+        expect(invoice_1.ii_filtered_by_merch(merch_1.id)).to contain_exactly(ii_1, ii_8)
+      end
+    end
+
+    describe '#discounted_revenue' do
+      it 'returns the sum of discounted and non discounted revenue for merchant invoice' do
+        expect(invoice_1.discounted_revenue(merch_1.id)).to eq(29.8)
       end
 
-      it 'should not return revenue from other items not on the invoice' do
-        invoice_1 = create(:invoice)
-        item_1 = create(:item)
-        invoice_item_1 = create(:invoice_item, item: item_1, invoice: invoice_1, unit_price: 100, quantity: 3)
+      it 'returns no discounts if quantity is not met for one item' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, merchant: merchant_1, percent: 20, threshold: 10)
+        items = create_list(:item, 2, merchant: merchant_1)
+        example_invoice = create(:invoice)
+        invoice_item_1 = create(:invoice_item, quantity: 5, unit_price: 10,item: items[0], invoice: example_invoice) 
+        invoice_item_2 = create(:invoice_item, quantity: 5, unit_price: 10, item: items[1], invoice: example_invoice) 
+        
+        expect(example_invoice.discounted_revenue(merchant_1.id)).to eq(100)
+      end
+      
+      it 'returns a discount on one item if it meets the threshold' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, merchant: merchant_1, percent: 20, threshold: 10)
+        items = create_list(:item, 2, merchant: merchant_1)
+        example_invoice = create(:invoice)
+        invoice_item_1 = create(:invoice_item, quantity: 10, unit_price: 10,item: items[0], invoice: example_invoice) 
+        invoice_item_2 = create(:invoice_item, quantity: 5, unit_price: 10, item: items[1], invoice: example_invoice) 
+        
+        expect(example_invoice.discounted_revenue(merchant_1.id)).to eq(130)
+      end
+      
+      it 'returns different discounts for each item depending on the items quantities' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, merchant: merchant_1, percent: 20, threshold: 10)
+        discount_2 = create(:discount, merchant: merchant_1, percent: 30, threshold: 15)
+        items = create_list(:item, 2, merchant: merchant_1)
+        example_invoice = create(:invoice)
+        invoice_item_1 = create(:invoice_item, quantity: 12, unit_price: 10,item: items[0], invoice: example_invoice) 
+        invoice_item_2 = create(:invoice_item, quantity: 15, unit_price: 10, item: items[1], invoice: example_invoice) 
+        
+        expect(example_invoice.discounted_revenue(merchant_1.id)).to eq(201)
+      end
 
-        invoice_item_2 = create(:invoice_item, unit_price: 200)
-        expect(invoice_1.total_revenue).to eq('$3.00')
+      it 'returns the best discount available' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, merchant: merchant_1, percent: 20, threshold: 10)
+        discount_2 = create(:discount, merchant: merchant_1, percent: 15, threshold: 15)
+        items = create_list(:item, 2, merchant: merchant_1)
+        example_invoice = create(:invoice)
+        invoice_item_1 = create(:invoice_item, quantity: 12, unit_price: 10,item: items[0], invoice: example_invoice) 
+        invoice_item_2 = create(:invoice_item, quantity: 15, unit_price: 10, item: items[1], invoice: example_invoice) 
+        
+        expect(example_invoice.discounted_revenue(merchant_1.id)).to eq(216)
+      end
+      
+      it 'returns discounts for items that are only for the specific merchant' do
+        merchant_1 = create(:merchant)
+        merchant_2 = create(:merchant)
+        discount_1 = create(:discount, merchant: merchant_1, percent: 20, threshold: 10)
+        discount_2 = create(:discount, merchant: merchant_1, percent: 30, threshold: 15)
+        items = create_list(:item, 2, merchant: merchant_1)
+        item_merch_2 = create(:item, merchant: merchant_2)
+        example_invoice = create(:invoice)
+        invoice_item_1 = create(:invoice_item, quantity: 12, unit_price: 10,item: items[0], invoice: example_invoice) 
+        invoice_item_2 = create(:invoice_item, quantity: 15, unit_price: 10, item: items[1], invoice: example_invoice) 
+        invoice_item_3 = create(:invoice_item, quantity: 15, unit_price: 10, item: item_merch_2, invoice: example_invoice)
+
+        merch_1_total = example_invoice.discounted_revenue(merchant_1.id)
+        merch_2_total = example_invoice.discounted_revenue(merchant_2.id)
+        
+        expect(merch_1_total + merch_2_total).to eq(351)
       end
     end
   end
