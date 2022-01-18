@@ -15,10 +15,17 @@ class InvoiceItem < ApplicationRecord
 
   # Instance Methods
   def best_discount
-    discounts.order(percent: :desc).where('threshold <= :quantity', quantity: self.quantity).first
+    discounts.order(percent: :desc)
+             .where('threshold <= :quantity', quantity: self.quantity)
+             .first
   end
 
-  def potential_revenue
+  def revenue_calc
     unit_price * quantity
+  end
+
+  def line_item_revenue
+    return revenue_calc if best_discount == nil
+    revenue_calc * (1 - best_discount.percent.fdiv(100))
   end
 end
