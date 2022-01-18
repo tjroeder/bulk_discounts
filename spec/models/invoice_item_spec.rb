@@ -44,4 +44,87 @@ RSpec.describe InvoiceItem, type: :model do
       end
     end
   end
+
+  describe 'instance methods' do
+    describe '#best_discount' do
+      it 'returns true when invoice item is past discount threshold' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, threshold: 5, merchant: merchant_1)
+        item_1 = create(:item, merchant: merchant_1)
+        invoice_item_1 = create(:invoice_item, item: item_1, quantity: 6)
+        require 'pry'; binding.pry
+        
+        expect(invoice_item_1.best_discount).to eq(discount_1)
+      end
+
+      it 'returns true if there are multiple discounts available' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, threshold: 5, merchant: merchant_1)
+        discount_2 = create(:discount, threshold: 2, merchant: merchant_1)
+        discount_3 = create(:discount, threshold: 10, merchant: merchant_1)
+        item_1 = create(:item, merchant: merchant_1)
+        invoice_item_1 = create(:invoice_item, item: item_1, quantity: 6)
+        
+        expect(invoice_item_1.best_discount).to eq(discount_2)
+      end
+      
+      it 'returns the best discount if multiple are available' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, percent: 50, threshold: 5, merchant: merchant_1)
+        discount_2 = create(:discount, percent: 77, threshold: 2, merchant: merchant_1)
+        discount_3 = create(:discount, percent: 88, threshold: 10, merchant: merchant_1)
+        item_1 = create(:item, merchant: merchant_1)
+        invoice_item_1 = create(:invoice_item, item: item_1, quantity: 6)
+        
+        expect(invoice_item_1.best_discount).to eq(discount_2)
+      end
+      
+      it 'returns false if there are no discounts that meet threshold' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, threshold: 5, merchant: merchant_1)
+        discount_2 = create(:discount, threshold: 2, merchant: merchant_1)
+        discount_3 = create(:discount, threshold: 10, merchant: merchant_1)
+        item_1 = create(:item, merchant: merchant_1)
+        invoice_item_1 = create(:invoice_item, item: item_1, quantity: 1)
+        
+        expect(invoice_item_1.best_discount).to eq(nil)
+      end
+    end
+    
+    describe '#revenue_calc' do
+      it 'returns the revenue calculation' do
+        invoice_item_1 = create(:invoice_item, quantity: 2, unit_price: 33)
+        
+        expect(invoice_item_1.revenue_calc).to eq(66)
+      end
+    end
+    
+    describe '#line_item_revenue' do
+      it 'returns the revenue without discounts' do
+        invoice_item_1 = create(:invoice_item, quantity: 2, unit_price: 33)
+        
+        expect(invoice_item_1.line_item_revenue).to eq(66)
+      end
+      
+      it 'returns the revenue with a discount' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, threshold: 2, percent: 10, merchant: merchant_1)
+        item_1 = create(:item, merchant: merchant_1)
+        invoice_item_1 = create(:invoice_item, item: item_1, quantity: 2, unit_price: 33)
+        
+        expect(invoice_item_1.line_item_revenue).to eq(59.4)
+      end
+      
+      it 'returns revenue with the best discount' do
+        merchant_1 = create(:merchant)
+        discount_1 = create(:discount, threshold: 5, percent: 20, merchant: merchant_1)
+        discount_2 = create(:discount, threshold: 2, percent: 10, merchant: merchant_1)
+        discount_3 = create(:discount, threshold: 10, merchant: merchant_1)
+        item_1 = create(:item, merchant: merchant_1)
+        invoice_item_1 = create(:invoice_item, item: item_1, quantity: 6, unit_price: 33)
+
+        expect(invoice_item_1.line_item_revenue).to eq(158.4)
+      end
+    end
+  end
 end
