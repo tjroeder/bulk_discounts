@@ -52,7 +52,6 @@ RSpec.describe InvoiceItem, type: :model do
         discount_1 = create(:discount, threshold: 5, merchant: merchant_1)
         item_1 = create(:item, merchant: merchant_1)
         invoice_item_1 = create(:invoice_item, item: item_1, quantity: 6)
-        require 'pry'; binding.pry
         
         expect(invoice_item_1.best_discount).to eq(discount_1)
       end
