@@ -18,6 +18,18 @@ RSpec.describe 'discounts/index.html.erb', type: :feature do
         expect(page).to have_content("#{disc_3.percent}% off #{disc_3.threshold} or more items")
         expect(page).to have_no_content("#{disc_4.percent}% off #{disc_4.threshold} or more items")
       end
+
+      describe 'VCR test', :vcr do
+        it 'displays a list of 3 upcoming holidays' do
+          VCR.use_cassette('holidays-2022-01-19', record: :all) do
+            # json_response = '[{"date":"2022-02-21","localName":"Presidents Day"},{"date":"2022-04-15","localName":"Good Friday"},{"date":"2022-04-01","localName":"April Fools Day"}]'
+            # stub_request(:get, 'https://date.nager.at/api/v3/NextPublicHolidays/us').to_return(status: 200, body: json_response)
+            # allow(HolidayService).to receive(get_request).and_return([{"date":"2022-02-21","localName":"Presidents Day"},{"date":"2022-04-15","localName":"Good Friday"},{"date":"2022-04-01","localName":"April Fools Day"}])
+
+            expect(page).to have_content('Presidents Day - Date: 2022-02-21')
+          end
+        end
+      end
     end
 
     describe 'clickable page elements' do
