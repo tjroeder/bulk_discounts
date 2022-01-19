@@ -17,10 +17,12 @@ RSpec.describe 'merchant invoice show page', type: :feature do
   let!(:item_4) { create(:item, merchant: merch_2) }
   let!(:item_5) { create(:item, merchant: merch_2) }
   let!(:item_6) { create(:item, merchant: merch_2) }
+  let!(:item_7) { create(:item, merchant: merch_2) }
   let!(:invoice_2) { create(:invoice) }
   let!(:invoice_item_4) { create(:invoice_item, item: item_4, invoice: invoice_2) }
   let!(:invoice_item_5) { create(:invoice_item, item: item_5, invoice: invoice_2) }
   let!(:invoice_item_6) { create(:invoice_item, item: item_6, invoice: invoice_2) }
+  let!(:invoice_item_7) { create(:invoice_item, item: item_6, invoice: invoice_1) }
 
   before(:each) { visit merchant_invoice_path(merch_1, invoice_1) }
 
