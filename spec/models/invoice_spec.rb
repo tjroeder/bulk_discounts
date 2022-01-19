@@ -41,6 +41,7 @@ RSpec.describe Invoice, type: :model do
   let!(:item_10) { Item.create!(name: 'item_10', description: 'desc_10', unit_price: 10, merchant: merch_1) }
   let!(:item_11) { Item.create!(name: 'item_11', description: 'desc_11', unit_price: 11, merchant: merch_2) }
   let!(:item_12) { Item.create!(name: 'item_12', description: 'desc_12', unit_price: 12, merchant: merch_1) }
+  let!(:item_13) { Item.create!(name: 'item_13', description: 'desc_13', unit_price: 13, merchant: merch_1) }
 
   let!(:invoice_1) { create(:invoice, status: 2, customer: cust_1, created_at: DateTime.new(2022, 1, 5, 0 , 0, 0)) }
   let!(:invoice_2) { create(:invoice, status: 2, customer: cust_2, created_at: DateTime.new(2021, 1, 5, 0 , 0, 0)) }
@@ -57,6 +58,7 @@ RSpec.describe Invoice, type: :model do
   let!(:ii_6) { InvoiceItem.create!(item: item_6, invoice: invoice_6, quantity: 3, unit_price: 6, status: 2) }
   let!(:ii_7) { InvoiceItem.create!(item: item_11, invoice: invoice_1, quantity: 3, unit_price: 7, status: 2) }
   let!(:ii_8) { InvoiceItem.create!(item: item_12, invoice: invoice_1, quantity: 4, unit_price: 8, status: 2) }
+  let!(:ii_9) { InvoiceItem.create!(item: item_13, invoice: invoice_1, quantity: 5, unit_price: 10, status: 2) }
 
   let!(:transactions_1) { Transaction.create!(invoice_id: invoice_1.id, credit_card_number: "4654405418240001", credit_card_expiration_date: "0001", result: 2)}
   let!(:transactions_2) { Transaction.create!(invoice_id: invoice_1.id, credit_card_number: "4654405418240002", credit_card_expiration_date: "0002", result: 2)}
