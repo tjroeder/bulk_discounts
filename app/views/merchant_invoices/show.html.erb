@@ -15,8 +15,9 @@
     <th>Quantity</th>
     <th>Unit Price</th>
     <th>Status</th>
+    <th>Discount</th>
   </tr>
-  <% @invoice.invoice_items.each do |ii| %>
+  <% @invoice.ii_filtered_by_merch(@merchant).each do |ii| %>
     <tr id="item-<%= ii.item_id %>">
       <td><%= ii.item.name %></td>  
       <td><%= ii.quantity %></td>
@@ -24,6 +25,7 @@
       <%= form_with model: [@merchant, ii], local: true do |f| %>
         <td><%= f.select :status, ['pending', 'packaged', 'shipped'] %> <%= f.submit 'Update Item Status' %></td>
       <% end %>
+      <td><%= (link_to 'Discount', merchant_discount_path(@merchant, ii.best_discount)) if ii.best_discount %></td>
     </tr>
   <% end %>
 </table>
