@@ -8,6 +8,8 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+require 'webmock/rspec'
+require 'vcr'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -41,12 +43,21 @@ module ViewHelpers
   def h
     ViewHelper.instance
   end
-
+  
   class ViewHelper
     include Singleton
     include ActionView::Helpers::NumberHelper
     include ApplicationHelper
   end
+end
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
+  config.configure_rspec_metadata!
+  config.ignore_localhost = true
+  config.allow_http_connections_when_no_cassette = false
+  config.debug_logger = $stderr
 end
 
 RSpec.configure do |config|
@@ -87,10 +98,5 @@ Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
     with.library :rails
-  end
-
-  VCR.configure do |config|
-    config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
-    config.hook_into :webmock
   end
 end
