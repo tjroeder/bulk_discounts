@@ -144,7 +144,11 @@ RSpec.describe Merchant, type: :model do
   
     describe 'Merchant Items Index: 5 most popular items' do
       it 'shows top 5 items ranked by most popular/most revenue' do
-        expect(merch_1.top_five_items).to eq([item_4, item_3, item_6, item_2, item_1])
+        expect(merch_1.top_five_items[0]).to eq(item_4)
+        expect(merch_1.top_five_items[1]).to eq(item_3)
+        expect(merch_1.top_five_items[2]).to eq(item_6)
+        expect(merch_1.top_five_items[3]).to eq(item_2)
+        expect(merch_1.top_five_items[4]).to eq(item_1)
       end
     end
   
