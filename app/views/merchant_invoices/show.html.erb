@@ -17,7 +17,7 @@
     <th>Status</th>
     <th>Discount</th>
   </tr>
-  <% @invoice.invoice_items.each do |ii| %>
+  <% @invoice.ii_filtered_by_merch(@merchant).each do |ii| %>
     <tr id="item-<%= ii.item_id %>">
       <td><%= ii.item.name %></td>  
       <td><%= ii.quantity %></td>
