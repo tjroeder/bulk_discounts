@@ -2,16 +2,16 @@ require 'rails_helper'
 
 RSpec.describe 'merchant invoice show page', type: :feature do
   let!(:merch_1) { create(:merchant) }
-  let!(:discount_1) { create(:discount, threshold: 10, percent: 24 ) }
-  let!(:discount_2) { create(:discount, threshold: 4, percent: 10 ) }
-  let!(:discount_2) { create(:discount, threshold: 3, percent: 20 ) }
+  let!(:discount_1) { create(:discount, merchant: merch_1, threshold: 10, percent: 24 ) }
+  let!(:discount_2) { create(:discount, merchant: merch_1, threshold: 4, percent: 10 ) }
+  let!(:discount_2) { create(:discount, merchant: merch_1, threshold: 3, percent: 20 ) }
   let!(:item_1) { create(:item, merchant: merch_1) }
   let!(:item_2) { create(:item, merchant: merch_1) }
   let!(:item_3) { create(:item, merchant: merch_1) }
   let!(:invoice_1) { create(:invoice) }
   let!(:invoice_item_1) { create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 5, unit_price: 10) }
   let!(:invoice_item_2) { create(:invoice_item, item: item_2, invoice: invoice_1, quantity: 8, unit_price: 12) }
-  let!(:invoice_item_3) { create(:invoice_item, item: item_3, invoice: invoice_1, quantity: 4, unit_price: 10) }
+  let!(:invoice_item_3) { create(:invoice_item, item: item_3, invoice: invoice_1, quantity: 2, unit_price: 10) }
 
   let!(:merch_2) { create(:merchant) }
   let!(:item_4) { create(:item, merchant: merch_2) }
@@ -98,34 +98,56 @@ RSpec.describe 'merchant invoice show page', type: :feature do
         end
       end
     end
-
+    
     describe 'clickable elements' do
       it 'updates the invoice items status' do
         within("#item-#{item_1.id}") do
           select('packaged', from: 'invoice_item_status')
           click_button('Update Item Status')
-
+          
           expect(page).to have_select('invoice_item_status', selected: 'packaged')
         end
-
+        
         expect(page).to have_current_path(merchant_invoice_path(merch_1, invoice_1))
-
+        
         within("#item-#{item_2.id}") do
           select('pending', from: 'invoice_item_status')
           click_button('Update Item Status')
-
+          
           expect(page).to have_select('invoice_item_status', selected: 'pending')
         end
-
+        
         expect(page).to have_current_path(merchant_invoice_path(merch_1, invoice_1))
-
+        
         within("#item-#{item_3.id}") do
           select('shipped', from: 'invoice_item_status')
           click_button('Update Item Status')
-
+          
           expect(page).to have_select('invoice_item_status', selected: 'shipped')
         end
+        
+        expect(page).to have_current_path(merchant_invoice_path(merch_1, invoice_1))
+      end
 
+      it 'displays a link to the best discount if able' do
+        save_and_open_page
+        within("#item-#{item_1.id}") do
+          expect(page).to have_link('Discount', href: merchant_discount_path(merch_1, invoice_item_1.best_discount))
+          click_link 'Discount'
+        end
+        expect(page).to have_current_path(merchant_discount_path(merch_1, invoice_item_1.best_discount))
+        visit merchant_invoice_path(merch_1, invoice_1)
+      
+        within("#item-#{item_2.id}") do
+          expect(page).to have_link('Discount', href: merchant_discount_path(merch_1, invoice_item_2.best_discount))
+          click_link 'Discount'
+        end
+        expect(page).to have_current_path(merchant_discount_path(merch_1, invoice_item_2.best_discount))
+        visit merchant_invoice_path(merch_1, invoice_1)
+        
+        within("#item-#{item_3.id}") do
+          expect(page).not_to have_link('Discount')
+        end
         expect(page).to have_current_path(merchant_invoice_path(merch_1, invoice_1))
       end
     end
