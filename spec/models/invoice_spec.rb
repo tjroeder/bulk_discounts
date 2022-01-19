@@ -120,6 +120,20 @@ RSpec.describe Invoice, type: :model do
       end
     end
     
+    describe '#ii_filtered_by_merch' do
+      it 'returns invoice_items filtered by merchants if given' do
+        expect(invoice_1.invoice_items).to contain_exactly(ii_1, ii_7, ii_8, ii_9)
+
+        expect(invoice_1.ii_filtered_by_merch(merch_1.id)).to contain_exactly(ii_1, ii_8, ii_9)
+      end
+
+      it 'returns invoice_items not filtered by merchants if not given' do
+        expect(invoice_1.invoice_items).to contain_exactly(ii_1, ii_7, ii_8, ii_9)
+
+        expect(invoice_1.ii_filtered_by_merch()).to contain_exactly(ii_1, ii_7,ii_8, ii_9)
+      end
+    end
+
     describe '#pre_discount_revenue' do
       it 'should return the pre discount revenue for the merchant invoice' do
         merchant_1 = create(:merchant)
