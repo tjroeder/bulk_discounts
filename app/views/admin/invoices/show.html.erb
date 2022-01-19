@@ -4,7 +4,8 @@
 <p>Status: <%= @invoice.status %></p>
 <p>Created on: <%= @invoice.created_at_formatted %></p>
 <p>Customer: <%= @invoice.customer.full_name %></p>
-<p>Total Revenue: <%= @invoice.total_revenue %> </p>
+<p>Total Revenue: <%= number_to_currency(@invoice.pre_discount_revenue().fdiv(100)) %> </p>
+<p>Total Discounted Revenue: <%= number_to_currency(@invoice.total_discounted_revenue().fdiv(100)) %> </p>
 
 <%= form_with model: [:admin, @invoice], local: true do |form| %>
   <p> Status: <%= form.select :status, ['in progress', 'cancelled', 'completed'] %> <%= form.submit 'Update Invoice Status' %></p>
@@ -12,6 +13,6 @@
 <h2>Items: <% @invoice.invoice_items.each do |ii| %> </h2>
   <h4><%= ii.item.name %></h4>
     <p>Quantity ordered: <%= ii.quantity %> </p>
-    <p>Price Item sold for: <%= cents_to_dollars(ii.unit_price) %></p>
+    <p>Price Item sold for: <%= number_to_currency(ii.unit_price) %></p>
     <p>Status: <%= ii.status %></p>
 <% end  %>
