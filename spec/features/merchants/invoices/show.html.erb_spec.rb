@@ -74,7 +74,7 @@ RSpec.describe 'merchant invoice show page', type: :feature do
       it 'displays total discounted revenue for the invoice' do
         rev = invoice_1.discounted_revenue(merch_1.id)
         expected = h.number_to_currency(rev.fdiv(100))
-        save_and_open_page
+        
         expect(page).to have_content("Total Discounted Revenue: #{expected}")
       end
 
