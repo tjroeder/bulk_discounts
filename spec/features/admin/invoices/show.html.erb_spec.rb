@@ -2,6 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'admin invoices index dashboard page', type: :feature do
   let!(:merch_1) { Merchant.create!(name: 'name_1') }
+  let!(:merch_2) { Merchant.create!(name: 'name_2') }
+
+  let!(:discount_1) { create(:discount, merchant: merch_1) }
+  let!(:discount_2) { create(:discount, merchant: merch_1) }
+  let!(:discount_3) { create(:discount, merchant: merch_2) }
+  let!(:discount_4) { create(:discount, merchant: merch_2) }
 
   let!(:cust_1) { Customer.create!(first_name: 'fn_1', last_name: 'ln_1') }
   let!(:cust_2) { Customer.create!(first_name: 'fn_2', last_name: 'ln_2') }
@@ -59,7 +65,17 @@ RSpec.describe 'admin invoices index dashboard page', type: :feature do
   end
 
   it "shows the total revenue of the invoice" do
-    expect(page).to have_content(invoice_1.total_revenue)
+    rev = invoice_1.pre_discount_revenue()
+    expected = h.number_to_currency(rev.fdiv(100))
+
+    expect(page).to have_content("Total Revenue: #{expected}")
+  end
+
+  it "shows the total discounted revenue of the invoice" do
+    rev = invoice_1.pre_discount_revenue()
+    expected = h.number_to_currency(rev.fdiv(100))
+
+    expect(page).to have_content("Total Discounted Revenue: #{expected}")
   end
 
   it "checks that the status is being updated" do
