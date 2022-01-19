@@ -4,6 +4,8 @@ class MerchantDiscountsController < ApplicationController
 
   def index
     @discs = @merch.discounts
+    holiday_search = HolidaySearch.new
+    @holidays = holiday_search.holidays_info
   end
 
   def show
