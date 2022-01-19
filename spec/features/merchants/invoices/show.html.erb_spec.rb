@@ -58,11 +58,9 @@ RSpec.describe 'merchant invoice show page', type: :feature do
       it 'does not display invoice items from other merchants' do
         within('table') do
           expect(page).to have_no_content(item_4.name)
-
           expect(page).to have_no_content(item_5.name)
-
           expect(page).to have_no_content(item_6.name)
-
+          expect(page).to have_no_content(item_7.name)
         end
       end
 
@@ -132,7 +130,6 @@ RSpec.describe 'merchant invoice show page', type: :feature do
       end
 
       it 'displays a link to the best discount if able' do
-        save_and_open_page
         within("#item-#{item_1.id}") do
           expect(page).to have_link('Discount', href: merchant_discount_path(merch_1, invoice_item_1.best_discount))
           click_link 'Discount'
